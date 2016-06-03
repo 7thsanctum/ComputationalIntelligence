@@ -1,0 +1,427 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PathFinderLibrary</name>
+    </assembly>
+    <members>
+        <member name="M:PathFinderLibrary.BoardIO.getBoard(System.String)">
+            <summary>
+            Returns a Board for the given filename or throws an exception if the file doesn't exist or is deemed to be an incorrect file format
+            </summary>
+            <param name="filename">The filename of the board to load. Looks in the executable directory unless a full path is supplied</param>
+            <returns>A Board object if successful or throws an exception otherwise</returns>
+        </member>
+        <member name="M:PathFinderLibrary.IBoard.move(PathFinderLibrary.Direction)">
+            <summary>
+            
+            </summary>
+            <param name="direction"></param>
+        </member>
+        <member name="M:PathFinderLibrary.IBoard.move(System.Int32)">
+            <summary>
+            Moves in the direction specified by the given parameter
+            </summary>
+            <param name="directionId">Clockwise from 0 - 7 representing the 8 possible directions</param>
+        </member>
+        <member name="T:PathFinderLibrary.Direction">
+            <summary>
+            An enumeration giving a direction representing 8 points on the compass
+            or Direction.Undefined to specify an error.
+            The enumeration can be cast to an integer with 0-7 representing clockwise North=0, NortEast = 1......NorthWest = 7
+            Direction.Undefined has an equivalent integer value of -1;
+            </summary>
+        </member>
+        <member name="F:PathFinderLibrary.Direction.North">
+            <summary>
+            Represents movement upwards. The row decrements.
+            </summary>
+        </member>
+        <member name="F:PathFinderLibrary.Direction.NorthEast">
+            <summary>
+            Represents movement up and right. The row decrements and the column increments.
+            </summary>
+        </member>
+        <member name="F:PathFinderLibrary.Direction.East">
+            <summary>
+            Represents movement right. The column increments.
+            </summary>
+        </member>
+        <member name="F:PathFinderLibrary.Direction.SouthEast">
+            <summary>
+            Represents movement down and right. The row increments and the column increments.
+            </summary>
+        </member>
+        <member name="F:PathFinderLibrary.Direction.South">
+            <summary>
+            Represents movement down. The row increments.
+            </summary>
+        </member>
+        <member name="F:PathFinderLibrary.Direction.SouthWest">
+            <summary>
+            Represents movement down and left. The row increments and the column decrements.
+            </summary>
+        </member>
+        <member name="F:PathFinderLibrary.Direction.West">
+            <summary>
+            Represents movement left. The column decrements.
+            </summary>
+        </member>
+        <member name="F:PathFinderLibrary.Direction.NorthWest">
+            <summary>
+            Represents movement up and left. The row decrements and the column decrements.
+            </summary>
+        </member>
+        <member name="F:PathFinderLibrary.Direction.Undefined">
+            <summary>
+            Represents an unknown direction. Used to indicate an illegal move or request outside the scope of visibility.
+            </summary>
+        </member>
+        <member name="T:PathFinderLibrary.Board">
+            <summary>
+            Represents a board comprised of cells. Cannot be instantiated publicly
+            </summary>
+        </member>
+        <member name="F:PathFinderLibrary.Board.cells">
+            <summary>
+            indexed by column then row ie cell[col, row]
+            </summary>
+        </member>
+        <member name="M:PathFinderLibrary.Board.onBoardFinished">
+            <summary>
+            Virtual event handler
+            </summary>
+        </member>
+        <member name="M:PathFinderLibrary.Board.onBoardChanged">
+            <summary>
+            Event to show board changed (picked up by board panel)
+            </summary>
+        </member>
+        <member name="M:PathFinderLibrary.Board.changeCurrentCell(System.Int32,System.Int32)">
+            <summary>
+            attempts to change the current cell to the target specified by x, y if it is not a blocking cell
+            saves repeating code in all 8 methods
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+        </member>
+        <member name="M:PathFinderLibrary.Board.getCells(PathFinderLibrary.Direction,System.Int32)">
+            <summary>
+            Gets an array of Cells in the specified direction to the specified depth. 
+            Element 0 in the returned array specifies the currently occupied cell. 
+            e.g calling this with a depth of 3 will return a 4 element array [0-3] 
+            representing the current cell and the next 3 in the direction specified.
+            If cells are not visible due to a blocked cell, lack of visibility or 
+            they lie outside the board dimensions then nulls are returned in those array positions
+            </summary>
+            <param name="direction">The direction to look in</param>
+            <param name="depth">The depth that is attempted to look up to</param>
+            <returns>A Cell[] of size depth + 1 where Cell[0] is the current cell 
+            and the subsequent elements are indexed by distance to the current cell 
+            in the specified dirrection. Cells outside the board are returned as 
+            nulls as are any cells obscured by a blocked cell.</returns>
+        </member>
+        <member name="M:PathFinderLibrary.Board.getCell(PathFinderLibrary.Direction,System.Int32)">
+            <summary>
+            Returns a single cell at the given distance and direction from the current cell. 
+            If the cell lies outside the board, outside the visibility range or is invisible 
+            due to being blocked by a blocking cell blocked then null is returned;
+            </summary>
+            <param name="direction">The direction to look in</param>
+            <param name="distance">The distance to look at</param>
+            <returns>A single cell at the given distance and direction from the current cell. </returns>
+        </member>
+        <member name="M:PathFinderLibrary.Board.move(PathFinderLibrary.Direction)">
+            <summary>
+            Attempts to move in the supplied direction returning the Cell that it is attempted to move to
+            regardless of the success of that move or null if the cell lies outside the board boundary 
+            
+            </summary>
+            <param name="direction">The <see cref="T:PathFinderLibrary.Direction">Direction</see> to attempt to move in expressed as an enumeration</param>
+            <returns>The Cell that it is attempted to move to
+            regardless of the success of that move</returns>
+        </member>
+        <member name="M:PathFinderLibrary.Board.move(System.Int32)">
+            <summary>
+            Attempts to move in the direction given by the supplied integer value 
+            returning the Cell that it is attempted to move to regardless of the 
+            success of that move or null if the cell lies outside the board boundary 
+            
+            </summary>
+            <param name="direction"></param>
+            <returns>The Cell that it is attempted to move to
+            regardless of the success of that move</returns>
+        </member>
+        <member name="M:PathFinderLibrary.Board.ToString">
+            <summary>
+            Overrides the object ToString method, returning a string representation of the boards state
+            </summary>
+            <returns>A string representation of the boards state</returns>
+        </member>
+        <member name="M:PathFinderLibrary.Board.getEuclideanDistanceToEnd(PathFinderLibrary.Cell)">
+            <summary>
+            Returns the straight line distance from the supplied cell to the end cell. 
+            Note that the cost of getting to the end is specified by summing each cell(s).PowerCost 
+            along the route a diagonal move to cell incurs no greater penalty. 
+            ie to move from grid poition 1,1 to 2,2 where the cell at 2,2 has a powerCost of 1 
+            incurs a cost of 1 whearas the euclidean distance is the square root of 2.
+            </summary>
+            <param name="aCell">The cell we wish to determine the distance to the end cell from.</param>
+            <returns>A double giving the euclidean distance from the supplied cell to the end cell</returns>
+        </member>
+        <member name="M:PathFinderLibrary.Board.getMinimumMovesToEnd(PathFinderLibrary.Cell)">
+            <summary>
+            Returns the minimum estimated number of moves to the end.
+            ie if the start is at 0,0 and the end at 4,1 then the euclidan 
+            distance is the square root of (4^2 + 1^2) = 4.123 but the end 
+            can be reached in 4 moves by moving for example east to 3,0 then 
+            south east to 4,1
+            </summary>
+            <param name="aCell"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PathFinderLibrary.Board.isBoardSolved">
+            <summary>
+            Returns true if the board has been solved ( end cell has been reached )
+            </summary>
+            <returns>True if the end cell has been reached within the time and power limits imposed.</returns>
+        </member>
+        <member name="M:PathFinderLibrary.Board.isBoardRunning">
+            <summary>
+            Returns true if the board has been activated
+            </summary>
+            <returns>True if the board is running</returns>
+        </member>
+        <member name="M:PathFinderLibrary.Board.getCurrentCell">
+            <summary>
+            Returns the currently occupied cell
+            
+            </summary>
+            <returns>Returns the Cell currently occupied</returns>
+        </member>
+        <member name="M:PathFinderLibrary.Board.getOppositeDirection(PathFinderLibrary.Direction)">
+            <summary>
+            Returns the opposite direction to that supplied. i.e if Direction.North is supplied Direction.South is returned.
+            </summary>
+            <param name="aDirection">The direction that we want the opposite direction for</param>
+            <returns>The opposite direction to that supplied</returns>
+        </member>
+        <member name="M:PathFinderLibrary.Board.getDirectionTo(PathFinderLibrary.Cell)">
+            <summary>
+            If the cell supplied as a parameter is adjacent to the current cell then the direction is returned
+            otherwise a value of Direction.Undefined is returned. The direction can be cast to an integer
+            using: int directionId = (int)getDirectionTo(aCell) or used as an enumeration
+            </summary>
+            <param name="adjacentCell">The cell we wish to determine the direction to.</param>
+            <returns>The direction towards the cell supplied as a parameter from the currently occupied cell, if that cell is adjacent otherwise Direction.Undefined is returned</returns>
+        </member>
+        <member name="M:PathFinderLibrary.Board.start">
+            <summary>
+            Used to start the board. Resets the state to that when loaded. 
+            Does nothing if the board is already running.
+            It is intended to be used by an implementation of AbstractAlgorithm in its run method
+            </summary>
+        </member>
+        <member name="M:PathFinderLibrary.Board.setCurrentCell(PathFinderLibrary.Cell)">
+            <summary>
+            Allows the current cell to be set effectively allowing a jump to any 
+            previously encountered cell on the board.
+            This was implemented to facilitate some algorithm implementations and has a restriction
+            that the visibility of the board must be set to 0 or 1. If the visibility is &gt; 1 
+            this method does nothing.
+            This stops the user retreiving cells via the getCell methods and jumping to them without 
+            incurring the appropriate costs of moving from cell to cell.
+                
+            Sets the current <see cref="T:PathFinderLibrary.Cell"/> Cell to the Cell supplied as long as it is not blocking. 
+            The power is reduced by the amount specified by the Cell suplied even if blocking.
+            </summary>
+            <param name="cell">The Cell to move to</param>      
+            <returns>The Current Cell</returns>
+        </member>
+        <member name="M:PathFinderLibrary.Board.solve(System.Collections.Generic.List{PathFinderLibrary.Direction})">
+            <summary>
+            Allows a <see cref="T:System.Collections.Generic.List"/>list of <see cref="T:PathFinderLibrary.Direction"/> directions to be applied sequentially returning the power consumption used if the board is solved otherwise -1 is returned.
+            </summary>
+            <param name="directions">A List of Directions to be applied from the start cell</param>
+            <returns>The power used if the supplied directions solve the board otherwise -1 is returned</returns>
+        </member>
+        <member name="P:PathFinderLibrary.Board.Width">
+            <summary>
+            Read only property giving the width of the board
+            </summary>
+        </member>
+        <member name="P:PathFinderLibrary.Board.Height">
+            <summary>
+            Read only property giving the height of the board
+            </summary>
+        </member>
+        <member name="P:PathFinderLibrary.Board.CurrentPower">
+            <summary>
+            Read only property giving the remaining power
+            </summary>
+        </member>
+        <member name="P:PathFinderLibrary.Board.Visibility">
+            <summary>
+            The number of cells in any direction that can be queried from the current cell
+            </summary>
+        </member>
+        <member name="E:PathFinderLibrary.Board.boardFinished">
+            <summary>
+            An event fired when the board is finished. Either when the time or power runs out or when the board is solved
+            </summary>
+        </member>
+        <member name="E:PathFinderLibrary.Board.boardChanged">
+            <summary>
+            Event to show board changed (picked up by board panel)
+            </summary>
+        </member>
+        <member name="T:PathFinderLibrary.Board.boardFinishedHandler">
+            <summary>
+            event to show board finished (picked up by PathFinderControl)
+            </summary>
+            <param name="board">The board that fires the event</param>
+        </member>
+        <member name="T:PathFinderLibrary.Board.boardChangedHandler">
+            <summary>
+            Event to show board changed (picked up by board panel)
+            </summary>
+        </member>
+        <member name="T:PathFinderLibrary.PathFinderControl">
+            <summary>
+            A UserControl that allow a board to loaded and the users implementation of <see cref="T:PathFinderLibrary.AbstractAlgorithm"/> to be executed with the search process displayed on a windows form.
+            </summary>
+        </member>
+        <member name="M:PathFinderLibrary.PathFinderControl.#ctor">
+            <summary>
+            The default constructor
+            </summary>
+        </member>
+        <member name="M:PathFinderLibrary.PathFinderControl.start(PathFinderLibrary.AbstractAlgorithm)">
+            <summary>
+            starts the board by executing the <see cref="T:PathFinderLibrary.AbstractAlgorithm"/> via its <see cref="M:PathFinderLibrary.AbstractAlgorithm.run"/> method
+            </summary>
+            <param name="alg">The users concrete implementation of the AbstractAlgorithm class</param>
+        </member>
+        <member name="F:PathFinderLibrary.PathFinderControl.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:PathFinderLibrary.PathFinderControl.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:PathFinderLibrary.PathFinderControl.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="P:PathFinderLibrary.PathFinderControl.Board">
+            <summary>
+            The board loaded via the controls load button
+            </summary>
+        </member>
+        <member name="E:PathFinderLibrary.PathFinderControl.SubmitClicked">
+            <summary>
+            An event, fired when the user click submit. Allows the Form that the control is placed on to hook into the control
+            </summary>
+        </member>
+        <member name="T:PathFinderLibrary.PathFinderControl.SubmitClickedHandler">
+            <summary>
+            fires event to be picked up by the users application which 
+            must implement an event listener for this event
+            </summary>
+            <param name="board"></param>
+        </member>
+        <member name="M:PathFinderLibrary.BoardPanel.board_boardChanged">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:PathFinderLibrary.BoardPanel.setUp">
+            <summary>
+            offline graphics
+            </summary>
+        </member>
+        <member name="T:PathFinderLibrary.AbstractAlgorithm">
+            <summary>
+            Abstract Class to be extended by the user
+            </summary>
+        </member>
+        <member name="F:PathFinderLibrary.AbstractAlgorithm.board">
+            <summary>
+            The board to be solved
+            </summary>
+        </member>
+        <member name="M:PathFinderLibrary.AbstractAlgorithm.#ctor(PathFinderLibrary.Board)">
+            <summary>
+            Default Constructor 
+            </summary>
+            <param name="board">The board to be solved</param>
+        </member>
+        <member name="M:PathFinderLibrary.AbstractAlgorithm.board_boardFinished(PathFinderLibrary.Board)">
+            <summary>
+            Event Listener that responds to the boardFinished event that fires when the time limit is reached, the board is solved or the power allocated has been used
+            </summary>
+            <param name="board">The board that fired the event</param>
+        </member>
+        <member name="M:PathFinderLibrary.AbstractAlgorithm.board_boardChanged">
+            <summary>
+            Event Listener that responds to the boardChanged event that fires after each move
+            </summary>
+        </member>
+        <member name="M:PathFinderLibrary.AbstractAlgorithm.run">
+            <summary>
+            Required run method where the user enters their code to solve the board
+            </summary>
+        </member>
+        <member name="P:PathFinderLibrary.AbstractAlgorithm.Board">
+            <summary>
+            Accesses the board passed to the algorithm using the default constructor
+            </summary>
+        </member>
+        <member name="T:PathFinderLibrary.NamespaceDoc">
+            <summary>
+            Holds all the required classes for the application.
+            </summary>
+        </member>
+        <member name="T:PathFinderLibrary.Cell">
+            <summary>
+            Represents one cell on the board. Cannot be instantiated publicly. 
+            </summary>
+        </member>
+        <member name="M:PathFinderLibrary.Cell.ToString">
+            <summary>
+            A string respresentation of this cell
+            </summary>
+            <returns>A string respresentation of this cell</returns>
+        </member>
+        <member name="P:PathFinderLibrary.Cell.Row">
+            <summary>
+            Read only property gives the row that the cell appears on the board (from 0 to height - 1)
+            </summary>
+        </member>
+        <member name="P:PathFinderLibrary.Cell.Col">
+            <summary>
+            Read only property gives the column that the cell appears on the board (from 0 to width - 1)
+            </summary>
+        </member>
+        <member name="P:PathFinderLibrary.Cell.IsBlocking">
+            <summary>
+            Read only property returns true if the cell cannot be entered or false if it can be visited.
+            </summary>
+        </member>
+        <member name="P:PathFinderLibrary.Cell.PowerCost">
+            <summary>
+            Read only property gives the energy cost of attempting to enter the cell. Note the energy is used whether the cell blocks or not
+            </summary>
+        </member>
+        <member name="P:PathFinderLibrary.Cell.VisitedCount">
+            <summary>
+            Returns the number of times that the cell has been visited
+            </summary>
+        </member>
+    </members>
+</doc>
