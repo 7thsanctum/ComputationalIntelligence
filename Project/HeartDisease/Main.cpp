@@ -554,7 +554,7 @@ void SimpleNeuralNet()
 	trainedCorrect = 0;
 	totalCorrect = 0;
 
-	for(int e = 0; e < 530; e++)	// Number of epochs 
+	for(int e = 0; e < 21530; e++)	// Number of epochs 
 	{
 		for(int i = 0; i < trainList.size(); i++)
 		{		
@@ -877,16 +877,31 @@ void VerifyPredictions()
 	cout << "Correct Test Predictions : " << totalCorrect << endl;
 }
 
-int main()
-{	
+int main(int argc, char* argv[])
+{
+	// Parse Args
+
+	if(argc > 1)
+	{
+		for(auto i = 0; i < argc; i++)
+		{
+			if(argv[i][0] == '-' && argv[i][1] == 'h')
+			{
+				cout << "TODO: Print Help" << endl;
+				return 0;
+			}
+			cout << "arg " << i << " : " << argv[i] << endl;
+		}
+	}
+
 	Initialise();
 
 	// TODO: Have this selected based on user choice
-	MLPEvoNeuralNet();
+	//MLPEvoNeuralNet();
 
 	//MLPNeuralNet();	// TODO: Get this function working!
 
-	//SimpleNeuralNet();
+	SimpleNeuralNet();
 
 	VerifyPredictions();
 
