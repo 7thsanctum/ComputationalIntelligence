@@ -1,0 +1,1 @@
+add_executable(classifier Main.cpp MLP.cpp)
